@@ -32,15 +32,13 @@ def play
     file = File.open(fname, 'r')
     contents = file.read.split('|')
 
-    puts contents
-
     word = contents[0]
     guesses_left = contents[1].to_i
     incorrect_letters = contents[2].split('')
     word_positions = contents[3].split('')
   end
 
-  until game_over do
+  until game_over
     puts "Guesses left: #{guesses_left}"
     puts "Incorrect letters: #{incorrect_letters.join(', ')}"
     puts "Word: #{word_positions.join(' ')}"
@@ -55,11 +53,12 @@ def play
       save(content)
     elsif guess.length > 1
       puts 'Not a valid guess!'
-    elsif incorrect_letters.any? { |letter| letter == guess }
+    elsif incorrect_letters.any? { |letter| letter == guess } \
+          || word_positions.any? { |letter| letter == guess }
       puts 'You already guessed that letter!'
     else
       if word.split('').any? { |letter| letter == guess }
-        puts "Correct!"
+        puts 'Correct!'
 
         positions = []
         word.split('').each_with_index do |letter, i|
@@ -86,7 +85,8 @@ def play
   if guesses_left == 0
     puts "Out of guesses! The word was \'#{word}\'."
   else
-    puts "You won! You correctly guessed \'#{word}!\' with #{guesses_left} guesses left!"
+    puts "You won! You correctly guessed \'#{word}!\' " \
+          "with #{guesses_left} guesses left!"
   end
   puts ''
 end
